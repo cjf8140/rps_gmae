@@ -61,7 +61,7 @@ while cap.isOpened():
 
             # Get angle using arcos of dot product
             angle = np.arccos(np.einsum('nt,nt->n',
-                v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:], 
+                v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:],
                 v[[1,2,3,5,6,7,9,10,11,13,14,15,17,18,19],:])) # [15,]
 
             angle = np.degrees(angle) # Convert radian to degree
@@ -70,7 +70,7 @@ while cap.isOpened():
             data = np.array([angle], dtype=np.float32)
             ret, results, neighbours, dist = knn.findNearest(data, 3)
             idx = int(results[0][0])
-                
+
             if cv2.waitKey(1) != ord(' ') and timeon == 0:
                 cv2.putText(img, text="Space!", org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 50)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 0, 255), thickness=2)
             if cv2.waitKey(1) == ord(' ') and timeon == 0:
@@ -80,27 +80,28 @@ while cap.isOpened():
                 timeon = 0
                 dec = 0
             if time.time() - initial_time < 1:
-                cv2.putText(img, text="3", org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 50)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 0, 255), thickness=2)    
+                cv2.putText(img, text="3", org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 50)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 0, 255), thickness=2)
             elif time.time() - initial_time < 2:
-                cv2.putText(img, text="2", org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 50)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 0, 255), thickness=2)    
+                cv2.putText(img, text="2", org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 50)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 0, 255), thickness=2)
             elif time.time() - initial_time < 3:
-                cv2.putText(img, text="1", org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 50)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 0, 255), thickness=2)    
+                cv2.putText(img, text="1", org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 50)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 0, 255), thickness=2)
             if time.time() - initial_time > 3 and dec == 0 and timeon == 1:
                 if idx == 0:
-                    txt="Scissors..z"
+                    txt="S"#"Scissors..z"
                 if idx == 5:
-                    txt="Rock..z"
+                    txt="R"#"Rock..z"
                 if idx == 9:
-                    txt="Paper..z"
+                    txt="P"#"Paper..z"
                 dec = 1
             if timeon == 1 and dec == 1:
-                cv2.putText(img, text=txt, org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] +50)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(0, 0, 255), thickness=2)    
-            
+                cv2.putText(img, text=txt, org=(int(res.landmark[0].x * img.shape[1] - 90), int(res.landmark[0].y * img.shape[0] +110)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=5, color=(0, 0, 255), thickness=2)
+
             # Draw gesture result
             if idx in rps_gesture.keys():
                 cv2.putText(img, text=rps_gesture[idx].upper(), org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 20)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 0, 0), thickness=2)
-            
-            
+            elif idx == 10:
+                cv2.putText(img, text="Thank You!", org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 20)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 0, 0), thickness=2)
+
 
             mp_drawing.draw_landmarks(img, res, mp_hands.HAND_CONNECTIONS)
 
