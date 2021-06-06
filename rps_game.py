@@ -52,14 +52,11 @@ while cap.isOpened():
             for j, lm in enumerate(res.landmark):
                 joint[j] = [lm.x, lm.y, lm.z]
 
-            # 조인트간 벡터 구하기
-            v1 = joint[[0,1,2,3,0,5,6,7,0,9,10,11,0,13,14,15,0,17,18,19],:] # 부모
-            v2 = joint[[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],:] # 자식
-            v = v2 - v1 # [20,3]
-            # Normalize v
+            v1 = joint[[0,1,2,3,0,5,6,7,0,9,10,11,0,13,14,15,0,17,18,19],:]
+            v2 = joint[[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],:]
+            v = v2 - v1
             v = v / np.linalg.norm(v, axis=1)[:, np.newaxis]
 
-            # Get angle using arcos of dot product
             angle = np.arccos(np.einsum('nt,nt->n',
                 v[[0,1,2,4,5,6,8,9,10,12,13,14,16,17,18],:],
                 v[[1,2,3,5,6,7,9,10,11,13,14,15,17,18,19],:])) # [15,]
